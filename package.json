@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/andreypopp/react-async-middleware/issues"
   },
-  "homepage": "https://github.com/andreypopp/react-async-middleware"
+  "homepage": "https://github.com/andreypopp/react-async-middleware",
+  "devDependencies": {
+    "semver": "~2.2.1"
+  }
 }
