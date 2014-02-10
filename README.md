@@ -1,6 +1,6 @@
 # react-async-middleware
 
-Connect/express middleware to sever [react-async][ra] components.
+Connect/express middleware to serve [react-async][ra] components.
 
     var express           = require('express')
     var ReactMiddleware   = require('react-async-middleware')
