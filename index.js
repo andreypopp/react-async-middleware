@@ -1,3 +1,5 @@
+"use strict";
+
 var url        = require('url');
 var ReactAsync = require('react-async');
 
@@ -9,5 +11,5 @@ module.exports = function(component) {
       if (err) return next(err);
       res.send(markup);
     });
-  }
-}
+  };
+};

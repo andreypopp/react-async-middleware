@@ -1,0 +1,80 @@
+var ReactAsyncMiddleware = require('./index');
+var React                = require('react');
+var ReactAsync           = require('react-async');
+var express              = require('express');
+var supertest            = require('supertest');
+
+var App = ReactAsync.createClass({
+
+  getInitialStateAsync: function(cb) {
+    cb()
+  },
+
+  render: function() {
+    return React.DOM.div(null, 'Hello, ', this.props.path);
+  }
+});
+
+var FailInState = ReactAsync.createClass({
+
+  getInitialStateAsync: function(cb) {
+    cb(new Error('fail in state'))
+  },
+
+  render: function() {
+    return React.DOM.div(null, 'Hello, ', this.props.path);
+  }
+});
+
+var FailInRender = ReactAsync.createClass({
+
+  getInitialStateAsync: function(cb) {
+    cb();
+  },
+
+  render: function() {
+    throw new Error('fail in render');
+  }
+});
+
+describe "react-async" {
+
+
+  it "works" (done) {
+    var app = express().use(ReactAsyncMiddleware(App));
+    supertest(app)
+      .get('/path')
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.text should contain 'path'
+        res.text should contain 'Hello, '
+        done();
+      });
+  }
+
+  it "propagates error from getInitialStateAsync(cb)" (done) {
+    var app = express().use(ReactAsyncMiddleware(FailInState));
+    supertest(app)
+      .get('/path')
+      .expect(500)
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.text should contain 'fail in state'
+        done();
+      });
+  }
+
+  it "propagates error from render()" (done) {
+    var app = express().use(ReactAsyncMiddleware(FailInRender));
+    supertest(app)
+      .get('/path')
+      .expect(500)
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.text should contain 'fail in render'
+        done();
+      });
+  }
+}

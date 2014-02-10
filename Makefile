@@ -6,10 +6,10 @@ install link:
 	@npm $@
 
 lint:
-	@#$(BIN)/jshint --verbose *.js
+	@$(BIN)/jshint --verbose *.js
 
 test::
-	@#$(BIN)/mocha -R spec specs/*.js
+	@$(BIN)/jspecs specs.jspc
 
 example::
 	@$(BIN)/node-dev --no-deps example/server.js
