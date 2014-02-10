@@ -7,7 +7,8 @@ module.exports = function(component) {
     var c = component({path: path});
     ReactAsync.renderComponentToString(c, function(err, markup) {
       if (err) return next(err);
-      res.send(markup);
+      res.body = markup;
+      next();
     });
   }
 }
