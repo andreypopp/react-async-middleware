@@ -1,6 +1,6 @@
 {
   "name": "react-async-middleware",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Connect/express middleware for react-async",
   "main": "index.js",
   "scripts": {
