@@ -3,18 +3,19 @@
 var url        = require('url');
 var ReactAsync = require('react-async');
 
-Object.prototype.extend = function(b) {
+Object.extend = function(a, b) {
   for (var prop in b)
     if (b.hasOwnProperty(prop))
-      this[prop] = b[prop];
-  return this;
+      a[prop] = b[prop];
+  return a;
 };
 
 module.exports = function(component, opts) {
   var opts = opts || { send: true };
   return function(req, res, next) {
     var path = url.parse(req.url).pathname;
-    var c = component({path: path}.extend(opts.props || {}));
+    var props = Object.extend({path: path}, opts.props || {});
+    var c = component(props);
     ReactAsync.renderComponentToString(c, function(err, markup) {
       if (err) return next(err);
       if (opts.send) res.send(markup);
