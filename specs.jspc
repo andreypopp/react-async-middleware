@@ -54,6 +54,25 @@ describe "react-async" {
       });
   }
 
+  it "takes options" (done) {
+    var app = express().use(ReactAsyncMiddleware(App, {
+      props: { path: "newpath" },
+      sendResponse: false
+    }).use(function(req, res) { // Send response ourselves later
+      res.send(res.body);
+    }));
+    supertest(app)
+      .get('/path')
+      .expect(200)
+      .expect('Content-Type', 'text/html; charset=utf-8')
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.text should contain 'newpath'
+        res.text should contain 'Hello, '
+        done();
+      });
+  }
+
   it "propagates error from getInitialStateAsync(cb)" (done) {
     var app = express().use(ReactAsyncMiddleware(FailInState));
     supertest(app)
