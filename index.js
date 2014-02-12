@@ -11,14 +11,14 @@ Object.extend = function(a, b) {
 };
 
 module.exports = function(component, opts) {
-  var opts = opts || { send: true };
+  var opts = Object.extend({ sendResponse: true }, opts);
   return function(req, res, next) {
     var path = url.parse(req.url).pathname;
     var props = Object.extend({path: path}, opts.props || {});
     var c = component(props);
     ReactAsync.renderComponentToString(c, function(err, markup) {
       if (err) return next(err);
-      if (opts.send) res.send(markup);
+      if (opts.sendResponse) res.send(markup);
       else {
         res.body = markup;
         next();
